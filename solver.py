@@ -94,6 +94,43 @@ def Challenge3():
   resultAddr += outputData + '.html'
   print(resultAddr)
 
+@challenge(4)
+def Challenge4():
+  from urllib.request import urlopen
+  startAddr = 'http://www.pythonchallenge.com/pc/def/linkedlist.php'
+  resultAddr = 'http://www.pythonchallenge.com/pc/def/'
+  param = '?nothing='
+  
+  n = '12345'
+  
+  tmpMarker = 'next nothing is '
+  
+  while n != 'finish':
+    tmpAddr = startAddr + param + n
+    tmpRequest = urlopen(tmpAddr)
+    tmpData = tmpRequest.read().decode()
+    n = ''
+    if str(tmpData).find(tmpMarker) > 0:
+      sys.stdout.write('.')
+      sys.stdout.flush()
+      for i in range(str(tmpData).find(tmpMarker) + len(tmpMarker), len(tmpData)):
+        if str(tmpData[i]).isdigit():
+          n += str(tmpData[i])
+    elif str(tmpData).find('Divide by two and keep going.') > 0:
+      tmp = tmpAddr.split('=')[1]
+      n = str(int(tmp) / 2)
+    elif str(tmpData).find('.html') > 0:
+      resultAddr += tmpData
+      n = 'finish'
+    else:
+      print('')
+      print(tmpAddr)
+      print(tmpData)
+      n = input('What is the next nothing? (type finish to exit) ')
+  
+  print('')
+  print(resultAddr)
+
 if __name__ == '__main__':
   to_run = sorted(challenges.keys())
   if len(sys.argv) > 1:
