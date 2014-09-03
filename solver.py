@@ -208,6 +208,40 @@ def Challenge6():
   resultAddr += input('What is the answer? ') + '.html'
   print(resultAddr)
   
+@challenge(7)
+def Challenge7():
+  from urllib.request import urlopen
+  from PIL import Image
+  import io
+  import re
+
+  startAddr = 'http://www.pythonchallenge.com/pc/def/oxygen.png'
+  resultAddr = 'http://www.pythonchallenge.com/pc/def/'
+  
+  request = urlopen(startAddr)
+  rData = request.read()
+  
+  img = Image.open(io.BytesIO(rData))
+  
+  msg = ''
+  pixels = []
+  for x in range(0, img.size[0], 7):
+    pixels.append(img.getpixel((x, img.size[1]/2)))
+  
+  characters = []
+  for p in pixels:
+    if p[0] == p[1] == p[2]:
+      characters.append(chr(p[0]))
+  msg = ''.join(characters)
+  msg = msg[msg.find('[')+1:-1].split(', ')
+  
+  page = ''
+  for c in msg:
+    page += chr(int(c))
+  
+  resultAddr += page + '.html'
+  print(resultAddr)
+    
 if __name__ == '__main__':
   to_run = sorted(challenges.keys())
   if len(sys.argv) > 1:
