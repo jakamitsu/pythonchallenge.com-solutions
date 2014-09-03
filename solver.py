@@ -130,6 +130,41 @@ def Challenge4():
   
   print('')
   print(resultAddr)
+  
+@challenge(5)
+def Challenge5():
+  import pickle
+  from urllib.request import urlopen
+
+  startAddr = 'http://www.pythonchallenge.com/pc/def/peak.html'
+  resultAddr = 'http://www.pythonchallenge.com/pc/def/'
+  
+  request = urlopen(startAddr)
+  rData = request.read().decode()
+
+  tmp = '<peakhell src="'
+  startMarker = str(rData).find(tmp) + len(tmp)
+  
+  endMarker = str(rData).find('"/>', startMarker)
+  
+  file = rData[startMarker:endMarker] 
+  
+  tmpRequest = urlopen(resultAddr + file)
+  tmpData = tmpRequest.read()
+  
+  inputData = pickle.loads(tmpData)
+  
+  for row in inputData:
+    displ = ''
+    for col in row:
+      for i in range(col[1]):
+        displ += str(col[0])
+    print(displ)
+    
+  resp = input('What word do you see? ')
+  
+  resultAddr += resp + '.html'
+  print(resultAddr)
 
 if __name__ == '__main__':
   to_run = sorted(challenges.keys())
