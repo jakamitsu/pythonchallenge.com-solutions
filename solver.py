@@ -240,7 +240,28 @@ def Challenge7():
   
   resultAddr += page + '.html'
   print(resultAddr)
-    
+
+@challenge(8)
+def Challenge8():
+  from urllib.request import urlopen
+  import bz2
+  import binascii
+
+  startAddr = 'http://www.pythonchallenge.com/pc/def/integrity.html'
+  resultAddr = 'http://www.pythonchallenge.com/pc/def/good.html'
+
+  request = urlopen(startAddr)
+  rData = request.read().decode()
+
+  un_p = "b'" + rData[rData.find("un: '")+5:rData.find("'", rData.find("un: '")+6)] + "'"
+  pw_p = "b'" + rData[rData.find("pw: '")+5:rData.find("'", rData.find("pw: '")+6)] + "'"
+
+  un = bz2.decompress(eval(un_p)).decode()
+  pw = bz2.decompress(eval(pw_p)).decode()
+  
+  print(resultAddr)
+  print('Username: ' + un, '\nPassword: ' + pw)
+
 if __name__ == '__main__':
   to_run = sorted(challenges.keys())
   if len(sys.argv) > 1:
