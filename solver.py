@@ -299,6 +299,28 @@ def Challenge9():
   print('Open dots.png to see the image.')
   resultAddr += 'bull.html'
   print(resultAddr)
+  
+@challenge(10)
+def Challenge():
+  resultAddr = 'http://www.pythonchallenge.com/pc/return/' 
+  a = ['1']
+  
+  while len(a) < 31:
+      prev_item = a[-1]
+      char = prev_item[0]
+      ch_count = 0
+      tmp = []
+      for c in prev_item:
+        if c == char:
+          ch_count += 1
+        else:
+          tmp.append(str(ch_count) + char)
+          char = c
+          ch_count = 1
+      tmp.append(str(ch_count) + char)
+      a.append(''.join(tmp))
+  resultAddr += str(len(a[30])) + '.html'
+  print(resultAddr)
 
 if __name__ == '__main__':
   to_run = sorted(challenges.keys())
