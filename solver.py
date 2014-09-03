@@ -261,6 +261,44 @@ def Challenge8():
   
   print(resultAddr)
   print('Username: ' + un, '\nPassword: ' + pw)
+  
+@challenge(9)
+def Challenge9():
+  import urllib.request
+  from PIL import Image
+  
+  startAddr = 'http://www.pythonchallenge.com/pc/return/good.html'
+  resultAddr = 'http://www.pythonchallenge.com/pc/return/' 
+  
+  auth_handler = urllib.request.HTTPBasicAuthHandler()
+  auth_handler.add_password(realm='inflate',
+                            uri=startAddr,
+                            user='huge',
+                            passwd='file')
+  opener = urllib.request.build_opener(auth_handler)
+  urllib.request.install_opener(opener)
+  request = urllib.request.urlopen(startAddr)
+  rData = request.read().decode()
+  
+  first = rData[rData.find('first:')+7:
+    rData.find('second:')].replace('\n', '').split(',')
+  second = rData[rData.find('second:')+8:
+    rData.find('-->', rData.find('second:'))].replace('\n', '').split(',')
+  
+  third = first + second
+  
+  img = Image.new('RGB', (640,480))
+  
+  for c in range(0, len(third), 2):
+    x = int(third[c])
+    y = int(third[c+1])
+    
+    img.putpixel((x, y), 255)
+  img.save('dots.png')
+  
+  print('Open dots.png to see the image.')
+  resultAddr += 'bull.html'
+  print(resultAddr)
 
 if __name__ == '__main__':
   to_run = sorted(challenges.keys())
