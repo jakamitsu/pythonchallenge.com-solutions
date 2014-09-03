@@ -29,6 +29,26 @@ def Challenge0():
   resultAddr += '%d.html' % inputData
   print(resultAddr)
 
+@challenge(1)
+def Challenge1():
+  from urllib.parse import urlparse
+  startAddr = 'http://www.pythonchallenge.com/pc/def/map.html'
+  resultAddr = 'http://www.pythonchallenge.com/pc/def/'
+  inputData = "g fmnc wms bgblr rpylqjyrc gr zw fylb. rfyrq ufyr amknsrcpq \
+  ypc dmp. bmgle gr gl zw fylb gq glcddgagclr ylb rfyr'q ufw rfgq rcvr gq qm \
+  jmle. sqgle qrpgle.kyicrpylq() gq pcamkkclbcb. lmu ynnjw ml rfc spj."
+  
+  inTab = 'abcdefghijklmnopqrstuvwxyz'
+  outTab ='cdefghijklmnopqrstuvwxyzab'
+  tranTab = str.maketrans(inTab, outTab)
+  
+  outputData = inputData.translate(tranTab)
+  
+  cUrl = urlparse(startAddr)
+  rUrl = cUrl.path.split('/')[-1].split('.')[0].translate(tranTab)
+
+  resultAddr += rUrl + '.html'
+  print(resultAddr)
 
 if __name__ == '__main__':
   to_run = sorted(challenges.keys())
