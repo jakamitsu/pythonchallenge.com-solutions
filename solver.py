@@ -20,6 +20,15 @@ def challenge(n):
   return decorator
 
 # Challenges code will go here
+@challenge(0)
+def Challenge0():
+  startAddr = 'http://www.pythonchallenge.com/pc/def/0.html'
+  resultAddr = 'http://www.pythonchallenge.com/pc/def/'
+  inputData = 2 ** 38
+  
+  resultAddr += '%d.html' % inputData
+  print(resultAddr)
+
 
 if __name__ == '__main__':
   to_run = sorted(challenges.keys())
