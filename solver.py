@@ -213,7 +213,6 @@ def Challenge7():
   from urllib.request import urlopen
   from PIL import Image
   import io
-  import re
 
   startAddr = 'http://www.pythonchallenge.com/pc/def/oxygen.png'
   resultAddr = 'http://www.pythonchallenge.com/pc/def/'
