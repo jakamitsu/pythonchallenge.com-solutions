@@ -50,6 +50,26 @@ def Challenge1():
   resultAddr += rUrl + '.html'
   print(resultAddr)
 
+@challenge(2)
+def Challenge2():
+  from urllib.request import urlopen
+  startAddr = 'http://www.pythonchallenge.com/pc/def/ocr.html'
+  resultAddr = 'http://www.pythonchallenge.com/pc/def/'
+  
+  request = urlopen(startAddr)
+  rData = request.read().decode()
+  
+  tmpMarker = 'find rare characters in the mess below:'
+  startIndex = str(rData).find(tmpMarker) + len(tmpMarker)
+  
+  outputData = ''
+  for i in range (startIndex, len(rData)):
+    if str(rData[i]).isalpha():
+      outputData += str(rData[i])
+      
+  resultAddr += outputData + '.html'
+  print(resultAddr)
+
 if __name__ == '__main__':
   to_run = sorted(challenges.keys())
   if len(sys.argv) > 1:
