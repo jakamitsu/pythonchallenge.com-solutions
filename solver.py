@@ -321,6 +321,44 @@ def Challenge():
       a.append(''.join(tmp))
   resultAddr += str(len(a[30])) + '.html'
   print(resultAddr)
+  
+@challenge(11)
+def Challenge11():
+  import urllib.request
+  from PIL import Image
+  import io
+  
+  startAddr = 'http://www.pythonchallenge.com/pc/return/cave.jpg'
+  resultAddr = 'http://www.pythonchallenge.com/pc/return/' 
+
+  auth_handler = urllib.request.HTTPBasicAuthHandler()
+  auth_handler.add_password(realm='inflate',
+                            uri=startAddr,
+                            user='huge',
+                            passwd='file')
+  opener = urllib.request.build_opener(auth_handler)
+  urllib.request.install_opener(opener)
+  request = urllib.request.urlopen(startAddr)
+
+  rData = request.read()
+  
+  img = Image.open(io.BytesIO(rData))
+  img.save('cave.jpg')
+  newsize = (int(img.size[0]/2), int(img.size[1]/2))
+  img_odd = Image.new('RGB', newsize)
+  img_even = Image.new('RGB', newsize)
+  
+  for x in range(0, img.size[0]-2, 2):
+    for y in range(0, img.size[1]-2, 2):
+      img_even.putpixel((int(x/2), int(y/2)), img.getpixel((x, y)))
+      img_odd.putpixel((int(x/2) + 1, int(y/2) + 1), img.getpixel((x+1, y+1)))
+  
+  img_even.save('even.jpg')
+  img_odd.save('odd.jpg')
+  
+  print('Look at the generated images for a clue.')
+  resultAddr += 'evil.html'
+  print(resultAddr)
 
 if __name__ == '__main__':
   to_run = sorted(challenges.keys())
