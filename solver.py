@@ -166,6 +166,48 @@ def Challenge5():
   resultAddr += resp + '.html'
   print(resultAddr)
 
+@challenge(6)
+def Challenge6():
+  from urllib.request import urlopen
+  import zipfile
+
+  startAddr = 'http://www.pythonchallenge.com/pc/def/channel.zip'
+  resultAddr = 'http://www.pythonchallenge.com/pc/def/'
+  
+  request = urlopen(startAddr)
+  rData = request.read()
+  
+  zipFile = open('channel.zip', 'wb')
+  zipFile.write(rData)
+  zipFile.close()
+  
+  n = '90052'
+  
+  archiveFile = zipfile.ZipFile('channel.zip')
+  fileName = '%s.txt'
+  
+  comments = []
+  
+  tmpMarker = 'Next nothing is '
+  
+  while n != '':
+    comments.append(archiveFile.getinfo(fileName % n).comment.decode())
+    tmpData = archiveFile.read(fileName % n).decode()
+    n = ''
+    for i in range(str(tmpData).find(tmpMarker) + len(tmpMarker), len(tmpData)):
+      if str(tmpData[i]).isdigit():
+        n += str(tmpData[i])
+
+  print(''.join(comments))
+  
+  tmp = input('What word do you see? ')
+  
+  tmpRequest = urlopen(resultAddr + tmp + '.html')
+  tmpData = tmpRequest.read().decode()
+  
+  resultAddr += input('What is the answer? ') + '.html'
+  print(resultAddr)
+  
 if __name__ == '__main__':
   to_run = sorted(challenges.keys())
   if len(sys.argv) > 1:
