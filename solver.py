@@ -404,6 +404,34 @@ def Challenge12():
   print('Look at generated images for a clue')
   resultAddr += 'disproportional.html'
   print(resultAddr)
+  
+@challenge(13)
+def Challenge13():
+  import xmlrpc.client
+  import urllib.request
+  
+  startAddr = 'http://www.pythonchallenge.com/pc/return/evil4.jpg'
+  resultAddr = 'http://www.pythonchallenge.com/pc/return/' 
+
+  XMLRPCserver = xmlrpc.client.Server(
+    'http://www.pythonchallenge.com/pc/phonebook.php'
+  )
+
+  auth_handler = urllib.request.HTTPBasicAuthHandler()
+  auth_handler.add_password(realm='inflate',
+                            uri=startAddr,
+                            user='huge',
+                            passwd='file')
+  opener = urllib.request.build_opener(auth_handler)
+  urllib.request.install_opener(opener)
+  request = urllib.request.urlopen(startAddr)
+
+  rData = request.read().decode()
+  
+  evilName = rData.split()[0]
+  
+  resultAddr += XMLRPCserver.phone(evilName).split('-')[1].lower() + '.html'
+  print(resultAddr)
 
 if __name__ == '__main__':
   to_run = sorted(challenges.keys())
