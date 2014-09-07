@@ -113,7 +113,8 @@ def Challenge4():
     if str(tmpData).find(tmpMarker) > 0:
       sys.stdout.write('.')
       sys.stdout.flush()
-      for i in range(str(tmpData).find(tmpMarker) + len(tmpMarker), len(tmpData)):
+      for i in range(str(tmpData).find(tmpMarker) + len(tmpMarker), 
+        len(tmpData)):
         if str(tmpData[i]).isdigit():
           n += str(tmpData[i])
     elif str(tmpData).find('Divide by two and keep going.') > 0:
@@ -253,8 +254,10 @@ def Challenge8():
   request = urlopen(startAddr)
   rData = request.read().decode()
 
-  un_p = "b'" + rData[rData.find("un: '")+5:rData.find("'", rData.find("un: '")+6)] + "'"
-  pw_p = "b'" + rData[rData.find("pw: '")+5:rData.find("'", rData.find("pw: '")+6)] + "'"
+  un_p = "b'" + rData[rData.find("un: '")+5:
+    rData.find("'", rData.find("un: '")+6)] + "'"
+  pw_p = "b'" + rData[rData.find("pw: '")+5:
+    rData.find("'", rData.find("pw: '")+6)] + "'"
 
   un = bz2.decompress(eval(un_p)).decode()
   pw = bz2.decompress(eval(pw_p)).decode()
@@ -358,6 +361,48 @@ def Challenge11():
   
   print('Look at the generated images for a clue.')
   resultAddr += 'evil.html'
+  print(resultAddr)
+
+@challenge(12)
+def Challenge12():
+  import urllib.request
+  from PIL import Image
+  import io
+  
+  startAddr = 'http://www.pythonchallenge.com/pc/return/evil2.gfx'
+  resultAddr = 'http://www.pythonchallenge.com/pc/return/' 
+
+  auth_handler = urllib.request.HTTPBasicAuthHandler()
+  auth_handler.add_password(realm='inflate',
+                            uri=startAddr,
+                            user='huge',
+                            passwd='file')
+  opener = urllib.request.build_opener(auth_handler)
+  urllib.request.install_opener(opener)
+  request = urllib.request.urlopen(startAddr)
+
+  rData = request.read()
+  
+  f1 = open('img1.jpg', 'wb')
+  f2 = open('img2.png', 'wb')
+  f3 = open('img3.gif', 'wb')
+  f4 = open('img4.png', 'wb')
+  f5 = open('img5.jpg', 'wb')
+  
+  f1.write(rData[0::5])
+  f2.write(rData[1::5])
+  f3.write(rData[2::5])
+  f4.write(rData[3::5])
+  f5.write(rData[4::5])
+  
+  f1.close()
+  f2.close()
+  f3.close()
+  f4.close()
+  f5.close()
+
+  print('Look at generated images for a clue')
+  resultAddr += 'disproportional.html'
   print(resultAddr)
 
 if __name__ == '__main__':
