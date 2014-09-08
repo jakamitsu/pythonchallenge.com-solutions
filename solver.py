@@ -433,6 +433,61 @@ def Challenge13():
   resultAddr += XMLRPCserver.phone(evilName).split('-')[1].lower() + '.html'
   print(resultAddr)
 
+@challenge(14)
+def Challenge14():
+  import urllib.request
+  from PIL import Image
+  import io
+  
+  startAddr = 'http://www.pythonchallenge.com/pc/return/wire.png'
+  resultAddr = 'http://www.pythonchallenge.com/pc/return/' 
+
+  auth_handler = urllib.request.HTTPBasicAuthHandler()
+  auth_handler.add_password(realm='inflate',
+                            uri=startAddr,
+                            user='huge',
+                            passwd='file')
+  opener = urllib.request.build_opener(auth_handler)
+  urllib.request.install_opener(opener)
+  request = urllib.request.urlopen(startAddr)
+
+  rData = request.read()
+  
+  img = Image.open(io.BytesIO(rData))
+  resImg = Image.new(img.mode, (100, 100), (0, 0, 0))
+  
+  pos_x = pos_y = 0
+  dir_x = 1
+  dir_y = 0
+  min_x = min_y = 0
+  max_x = max_y = 99
+  
+  for i in range(10000):
+    resImg.putpixel((pos_x, pos_y), img.getpixel((i, 0)))
+    if dir_x == 1 and pos_x == max_x:
+      dir_x = 0
+      dir_y = 1
+      min_y += 1
+    elif dir_x == -1 and pos_x == min_x:
+      dir_x = 0
+      dir_y = -1
+      max_y -= 1
+    elif dir_y == 1 and pos_y == max_y:
+      dir_x = -1
+      dir_y = 0
+      max_x -= 1
+    elif dir_y == -1 and pos_y == min_y:
+      dir_x = 1
+      dir_y = 0
+      min_x += 1
+    pos_x += dir_x
+    pos_y += dir_y
+  resImg.save('spiral.png')
+  
+  print('Look at generated image for a clue.')
+  resultAddr += 'uzi.html'
+  print(resultAddr)
+
 if __name__ == '__main__':
   to_run = sorted(challenges.keys())
   if len(sys.argv) > 1:
