@@ -487,6 +487,28 @@ def Challenge14():
   print('Look at generated image for a clue.')
   resultAddr += 'uzi.html'
   print(resultAddr)
+  
+@challenge(15)
+def Challenge15():
+  import datetime
+  
+  resultAddr = 'http://www.pythonchallenge.com/pc/return/' 
+  dates = []
+  
+  for year in range(1586, 1997, 10):
+    d1 = datetime.date(year, 3, 1) - datetime.timedelta(days=1)
+    d2 = datetime.date(year, 1, 26)
+    
+    if d1.day == 29:
+      if d2.weekday() == 0:
+        dates.append(d2)
+  
+  print("The date you are looking for is: %s" %
+    (dates[-2] + datetime.timedelta(days=1)))
+  print("This is the birthday of Mozart")
+  resultAddr += 'mozart.html'
+  print(resultAddr)
+  
 
 if __name__ == '__main__':
   to_run = sorted(challenges.keys())
