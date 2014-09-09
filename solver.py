@@ -508,7 +508,49 @@ def Challenge15():
   print("This is the birthday of Mozart")
   resultAddr += 'mozart.html'
   print(resultAddr)
+
+@challenge(16)
+def Challenges16():
+  import urllib.request
+  from PIL import Image
+  import io
   
+  startAddr = 'http://www.pythonchallenge.com/pc/return/mozart.gif'
+  resultAddr = 'http://www.pythonchallenge.com/pc/return/' 
+
+  auth_handler = urllib.request.HTTPBasicAuthHandler()
+  auth_handler.add_password(realm='inflate',
+                            uri=startAddr,
+                            user='huge',
+                            passwd='file')
+  opener = urllib.request.build_opener(auth_handler)
+  urllib.request.install_opener(opener)
+  request = urllib.request.urlopen(startAddr)
+
+  rData = request.read()
+  
+  img = Image.open(io.BytesIO(rData))
+  resImg = img
+  
+  toFind = 195
+  
+  for row in range(resImg.size[1]):
+    rowBoundry = 0, row, resImg.size[0], row + 1
+    rowData = resImg.crop(rowBoundry)
+    rowString = list(rowData.tostring())
+    indx = rowString.index(toFind) + 2
+    rowString = rowString[indx:] + rowString[:indx]
+    tmp = b''
+    for b in rowString:
+      tmp += bytes([b])
+    rowString = tmp
+    rowData.fromstring(rowString)
+    resImg.paste(rowData, rowBoundry)
+
+  resImg.save('result.gif')
+  print('Look at generated image for a clue.')
+  resultAddr += 'romance.html'
+  print(resultAddr)
 
 if __name__ == '__main__':
   to_run = sorted(challenges.keys())
