@@ -510,7 +510,7 @@ def Challenge15():
   print(resultAddr)
 
 @challenge(16)
-def Challenges16():
+def Challenge16():
   import urllib.request
   from PIL import Image
   import io
@@ -551,7 +551,75 @@ def Challenges16():
   print('Look at generated image for a clue.')
   resultAddr += 'romance.html'
   print(resultAddr)
+  
+@challenge(17)
+def Challenge17():
+  import urllib.request
+  import urllib.parse
+  from http import cookiejar
+  import bz2
+  import xmlrpc.client
+  
+  startAddr = 'http://www.pythonchallenge.com/pc/def/linkedlist.php'
+  startAddr += '?busynothing='
+  
+  next_nothing = '12345'
+  
+  cookie_jar = cookiejar.CookieJar()
+  cookie_processor = urllib.request.HTTPCookieProcessor(cookie_jar)
+  opener = urllib.request.build_opener(cookie_processor)
+  message = ""
+  marker = 'and the next busynothing is '
+  
+  print('Decrypting message, it will take a while...')
+  if message == '':
+    while next_nothing != '-1':
+      u = opener.open(startAddr + next_nothing)
+      for cookie in cookie_jar:
+        if cookie.name == 'info':
+          if cookie.value == '+':
+            message += '%20'
+          else:
+            message += cookie.value
+      rData = u.read().decode()
+      indx = rData.find(marker)
+      if indx == -1:
+        next_nothing = '-1'
+      else:
+        next_nothing = rData[indx+len(marker):]
 
+  message = bz2.decompress(urllib.parse.unquote_to_bytes(message))
+  print(message.decode())
+  
+  message = 'the flowers are on their way'
+  
+  XMLRPCserver = xmlrpc.client.Server(
+    'http://www.pythonchallenge.com/pc/phonebook.php'
+  )
+  
+  print('Calling...')
+  phone = XMLRPCserver.phone('Leopold')
+  print(phone)
+  
+  url = "http://www.pythonchallenge.com/pc/stuff/"
+  url += phone.split('-')[1].lower() + '.php'
+  
+  o = urllib.request.build_opener()
+  o.addheaders.append(('Cookie', 'info=' + urllib.parse.quote_plus(message)))
+  
+  response = o.open(url)
+  
+  rData = response.read().decode()
+  
+  idx1 = rData.find('<br><br>', rData.find('leopold.jpg')) + 8
+  idx2 = rData.find('</font>')
+  
+  print(rData[idx1:idx2])
+  resultAddr = 'http://www.pythonchallenge.com/pc/return/'
+  resultAddr += 'balloons.html'
+  
+  print(resultAddr)
+  
 if __name__ == '__main__':
   to_run = sorted(challenges.keys())
   if len(sys.argv) > 1:
